@@ -53,11 +53,32 @@ connection string, the seed runs once into your database and everything persists
   automatically. Manage them in **Admin → Art Gallery** (upload, publish/hide, reorder).
 - Site-wide brand/footer/socials live in **Admin → Site Settings**.
 
-## Production build
+## Deploying to Vercel
+
+The repo is Vercel-ready: the client builds to static files, and the whole Express API runs
+as one serverless function ([api/index.ts](api/index.ts), routed by [vercel.json](vercel.json)).
+Images are stored **in MongoDB** (not on disk), so they survive serverless deploys; large
+photos are compressed in the browser before upload to fit Vercel's request-size limit.
+
+1. Push this repo to GitHub (or install the CLI: `npm i -g vercel`).
+2. On [vercel.com](https://vercel.com) → **Add New → Project** → import the repo.
+   The build settings are read from `vercel.json` automatically.
+3. In **Project → Settings → Environment Variables**, add:
+   - `MONGODB_URI` — your Atlas connection string
+   - `DB_NAME` — e.g. `DorcasOdunjo`
+   - `ADMIN_EMAIL` / `ADMIN_PASSWORD` — your admin login
+   - `JWT_SECRET` — a long random string
+4. In Atlas → **Network Access**, allow `0.0.0.0/0` (Vercel functions have no fixed IP).
+5. Deploy. The site is served statically; `/api/*` and `/uploads/*` hit the function.
+
+CLI alternative: `vercel` from the repo root, answer the prompts, add the env vars with
+`vercel env add`, then `vercel --prod`.
+
+## Production build (self-hosted alternative)
 
 ```bash
 npm run build          # builds server (tsc) and client (vite)
 ```
 
 Serve `client/dist` from any static host and run the server (`server/dist/index.js`) with the
-env vars above; point the client at the API with a reverse proxy for `/api` and `/uploads`.
+env vars above; proxy `/api` and `/uploads` to it.

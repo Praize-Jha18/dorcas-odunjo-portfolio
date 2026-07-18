@@ -44,7 +44,10 @@
       "Bash(ps -eo pid,lstart,command)",
       "Bash(npx tsx *)",
       "Bash(echo \"typecheck:$?\")",
-      "Bash(node -pe 'JSON.parse\\(require\\(\"fs\"\\).readFileSync\\(0\\)\\).map\\(p=>p.slug\\).join\\(\", \"\\)')"
+      "Bash(node -pe 'JSON.parse\\(require\\(\"fs\"\\).readFileSync\\(0\\)\\).map\\(p=>p.slug\\).join\\(\", \"\\)')",
+      "Bash(echo \"server-typecheck:$?\")",
+      "Bash(echo \"client-typecheck:$?\")",
+      "Bash(node -pe 'JSON.parse\\(require\\(\"fs\"\\).readFileSync\\(0\\)\\).length + \" pages\"')"
     ]
   }
 }
